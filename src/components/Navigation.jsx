@@ -1,18 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { Globe } from "lucide-react";
+import { NavLink } from "react-router";
 
-function Navigation(p) {
+function Navigation() {
   return (
     <nav className="z-10 flex items-center justify-between px-8 py-4 text-white bg-slate-800">
       <div className="flex items-center space-x-8">
-        <a href="/" className="text-2xl font-bold ">
+        <NavLink to="/" className="text-2xl font-bold ">
           Horizone
-        </a>
-        <div className="hidden space-x-6 md:flex">
-          <a href={`/`} className="transition-colors">
-            Home
-          </a>
-        </div>
+        </NavLink>
       </div>
 
       <div className="flex items-center space-x-4">

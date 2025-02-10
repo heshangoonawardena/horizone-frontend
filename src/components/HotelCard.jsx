@@ -7,13 +7,6 @@ const HotelCard = (props) => {
   
   const { _id, image, name, location, rating, reviews, price } = props.hotel;
   
-  const [num, setNum] = useState(1)
-
-  const handleClick = (e) => {
-    setNum(num + 1)
-  };
-  
-
   return (
     <div href={_id} key={_id} className="relative block group">
       <div className="relative aspect-[4/3] overflow-hidden rounded-xl">
@@ -40,10 +33,6 @@ const HotelCard = (props) => {
         <div className="flex items-baseline space-x-2">
           <span className="text-xl font-bold">${price}</span>
         </div>
-      </div>
-      <div className="mt-4">
-        <p>{num}</p>
-        <Button onClick={handleClick}>click me</Button>
       </div>
     </div>
   );
