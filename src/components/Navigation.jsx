@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Globe } from "lucide-react";
 import { NavLink } from "react-router";
+import { useSelector } from "react-redux";
 
 function Navigation() {
   return (
@@ -9,6 +10,13 @@ function Navigation() {
         <NavLink to="/" className="text-2xl font-bold ">
           Horizone
         </NavLink>
+        <div className="hidden space-x-6 md:flex">
+          <Button variant="ghost" className="">
+            <NavLink to="/hotels/create" className="transition-colors ">
+              Create Hotel
+            </NavLink>
+          </Button>
+        </div>
       </div>
 
       <div className="flex items-center space-x-4">
@@ -17,11 +25,14 @@ function Navigation() {
           EN
         </Button>
         <Button variant="ghost" asChild>
-          <a href="/sign-in">Log In</a>
+          <NavLink to="/sign-in">Log In</NavLink>
         </Button>
         <Button asChild>
-          <a href="/sign-up">Sign Up</a>
+          <NavLink to="/sign-up">Sign Up</NavLink>
         </Button>
+        {/* <div>
+          <p>{ user.name }</p>
+        </div> */}
       </div>
     </nav>
   );

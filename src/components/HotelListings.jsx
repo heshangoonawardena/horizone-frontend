@@ -1,14 +1,14 @@
-import { getHotels } from "@/lib/api/hotels";
+import { useGetHotelsQuery } from "@/lib/api";
+import { useState } from "react";
+import { useSelector } from "react-redux";
 import HotelCard from "./HotelCard";
 import LocationTab from "./LocationTab";
-import { useState } from "react";
-import { useEffect } from "react";
 
 export default function HotelListings() {
-  const [hotels, setHotels] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [isError, setIsError] = useState(false);
+
+  const { data: hotels, isLoading, isError, error } = useGetHotelsQuery();
+
+  const { user } = useSelector((state) => state.user);
 
   const locations = ["All", "New York", "Australia", "UK", "Paris"];
 
@@ -27,22 +27,7 @@ export default function HotelListings() {
             .includes(selectedLocation.toLocaleLowerCase())
         );
 
-  useEffect(() => {
-    const fetchHotels = async () => {
-      try {
-        const data = await getHotels();
-        setHotels(data);
-      } catch (error) {
-        setIsError(true);
-        setError(error.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchHotels();
-  }, []);
-
-  isLoading 
+  isLoading;
 
   return (
     <section className="px-8 py-8 lg:py-16">
@@ -70,9 +55,9 @@ export default function HotelListings() {
       {isLoading ? (
         <div>Loading...</div>
       ) : isError ? (
-          <div className="text-red-500"> 
-            <p>Error: {error}</p>
-          </div>
+        <div className="text-red-500">
+          <p>Error: {error}</p>
+        </div>
       ) : (
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
           {filteredHotels.map((hotel) => {
