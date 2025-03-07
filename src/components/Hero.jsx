@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sparkles } from "lucide-react";
+import SplitText from "./reactBites/SplitText";
 
 export default function Hero() {
-
   const handleSearch = (e) => {
     e.preventDefault();
     dispatch(submit(searchQuery));
@@ -13,9 +13,12 @@ export default function Hero() {
     <div className="">
       {/* Hero Content */}
       <div className="relative z-10 flex flex-col items-center justify-center px-8 pt-32 pb-32 text-white">
-        <h1 className="mb-8 text-4xl font-bold text-center md:text-6xl">
-          Find Your Best Staycation
-        </h1>
+        <SplitText
+          text="Find Your Best Staycation"
+          className="mb-8 text-4xl font-bold text-center md:text-6xl"
+          animationFrom={{ opacity: 0, transform: "translate3d(0,50px,0)" }}
+          threshold={0.2}
+        />
         <p className="max-w-2xl mb-12 text-xl text-center">
           Describe your dream destination and experience, and we'll find the
           perfect place for you.

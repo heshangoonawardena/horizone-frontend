@@ -3,12 +3,10 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import HotelCard from "./HotelCard";
 import LocationTab from "./LocationTab";
+import SpotlightCard from "./reactBites/SpotLightCard";
 
 export default function HotelListings() {
-
   const { data: hotels, isLoading, isError, error } = useGetHotelsQuery();
-
-  const { user } = useSelector((state) => state.user);
 
   const locations = ["All", "New York", "Australia", "UK", "Paris"];
 
@@ -61,7 +59,14 @@ export default function HotelListings() {
       ) : (
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
           {filteredHotels.map((hotel) => {
-            return <HotelCard key={hotel._id} hotel={hotel} />;
+            return (
+              <SpotlightCard
+                className="custom-spotlight-card"
+                spotlightColor="rgba(112, 128, 144, 0.8)"
+              >
+                <HotelCard key={hotel._id} hotel={hotel} />
+              </SpotlightCard>
+            );
           })}
         </div>
       )}

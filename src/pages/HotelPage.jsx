@@ -95,12 +95,12 @@ const HotelPage = () => {
           </div>
           <div className="flex items-center space-x-1">
             <Star className="w-5 h-5 fill-primary text-primary" />
-            <span className="font-bold">{hotel.rating}</span>
+            <span className="font-bold">{hotel?.rating}</span>
             <span className="text-muted-foreground">
-              ({hotel.reviews.toLocaleString()} reviews)
+              ({hotel?.reviews?.toLocaleString() ?? "No"} reviews)
             </span>
           </div>
-          <p className="text-muted-foreground">{hotel.description}</p>
+          <p className="text-muted-foreground">{hotel?.description ?? "No Description"}</p>
           <Card>
             <CardContent className="p-4">
               <h2 className="mb-4 text-xl font-semibold">Amenities</h2>

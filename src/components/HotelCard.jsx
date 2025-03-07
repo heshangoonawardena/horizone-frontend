@@ -23,9 +23,9 @@ const HotelCard = (props) => {
         </div>
         <div className="flex items-center space-x-1">
           <Star className="w-4 h-4 fill-primary text-primary" />
-          <span className="font-medium">{rating}</span>
+          {rating ?? <span className="font-medium">{rating ?? "No ratings"}</span>}
           <span className="text-muted-foreground">
-            ({reviews.toLocaleString()} Reviews)
+            ({reviews?.toLocaleString() ?? "No"} Reviews)
           </span>
         </div>
         <div className="flex items-baseline space-x-2">
