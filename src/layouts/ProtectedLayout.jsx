@@ -1,7 +1,7 @@
 import { useUser } from "@clerk/clerk-react"
 import { Navigate, Outlet } from "react-router"
 
-const protectedLayout = () => {
+const ProtectedLayout = () => {
 
   const { isLoaded, isSignedIn, user } = useUser()
 
@@ -15,4 +15,4 @@ const protectedLayout = () => {
   
 }
 
-export default protectedLayout
+export default ProtectedLayout

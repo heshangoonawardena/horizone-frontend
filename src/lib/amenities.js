@@ -1,0 +1,18 @@
+export const amenitiesList = [
+	{ value: "freeWifi", label: "Free WiFi", icon: "Wifi" },
+	{ value: "pool", label: "Swimming Pool", icon: "Waves" },
+	{ value: "gym", label: "Gym", icon: "Dumbbell" },
+	{ value: "spa", label: "Spa", icon: "PersonStanding" },
+	{ value: "parking", label: "Parking", icon: "ParkingSquare" },
+	{ value: "restaurant", label: "Restaurant", icon: "Utensils" },
+	{ value: "airConditioning", label: "Air Conditioning", icon: "AirVent" },
+	{ value: "roomService", label: "Room Service", icon: "Shirt" },
+	{ value: "housekeeping", label: "Housekeeping", icon: "SprayCan" },
+	{ value: "businessCenter", label: "Business Center", icon: "Laptop2" },
+	{ value: "laundryService", label: "Laundry & Dry Cleaning", icon: "WashingMachine" },
+	{ value: "cctvSecurity", label: "CCTV Security", icon: "Cctv" },
+	{ value: "fireplace", label: "Fire Place", icon: "FlameKindling" },
+	{ value: "luggageStorage", label: "Luggage Storage", icon: "Luggage" },
+	{ value: "airportShuttle", label: "Airport Shuttle", icon: "CarFront" },
+	{ value: "eventHall", label: "Event Hall", icon: "Store" },
+];
