@@ -28,6 +28,9 @@ export const api = createApi({
         body: hotel,
       }),
     }),
+    getBookings: builder.query({
+      query: () => `bookings/user`,
+    }),
     createBooking: builder.mutation({
       query: (booking) => ({
         url: `bookings`,
@@ -41,6 +44,7 @@ export const api = createApi({
 export const {
   useGetHotelsQuery,
   useGetHotelByIdQuery,
+  useGetBookingsQuery,
   useCreateHotelMutation,
   useCreateBookingMutation,
 } = api;
