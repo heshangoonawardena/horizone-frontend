@@ -32,7 +32,6 @@ export function BookingDialog({ open, onOpenChange, bookingDetails }) {
 				kids,
 				totalAmount,
 			} = bookingDetails;
-			console.log(bookingDetails);
 
 			await createBooking({
 				hotelId,

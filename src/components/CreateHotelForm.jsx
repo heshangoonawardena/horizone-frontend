@@ -35,7 +35,6 @@ const CreateHotelForm = () => {
 	const { user } = useUser();
 
 	const onSubmit = async (values) => {
-		console.log(values);
 		const {
 			name,
 			location,
