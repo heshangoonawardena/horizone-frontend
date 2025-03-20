@@ -3,6 +3,7 @@ import { useState } from "react";
 import HotelCard from "./HotelCard";
 import LocationTab from "./LocationTab";
 import SpotlightCard from "./reactBites/SpotLightCard";
+import SkeletonListings from "./skeletons/HotelCardSkeleton";
 
 export default function HotelListings() {
 	const { data: hotels, isLoading, isError, error } = useGetHotelsQuery();
@@ -50,7 +51,11 @@ export default function HotelListings() {
 				})}
 			</div>
 			{isLoading ? (
-				<div>Loading...</div>
+				<div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+					{[...Array(8)].map(() => (
+						<SkeletonListings />
+					))}
+				</div>
 			) : isError ? (
 				<div className="text-red-500">
 					<p>Error: {error}</p>

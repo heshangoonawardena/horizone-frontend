@@ -1,9 +1,26 @@
 import { MapPin, Star } from "lucide-react";
+import { useState } from "react";
 import { Link } from "react-router";
+import HotelCardSkeleton from "./skeletons/HotelCardSkeleton";
 
 const HotelCard = (props) => {
-  const { _id, image, name, location, rating, reviews, roomTypes } = props.hotel;
+	const [imageLoaded, setImageLoaded] = useState(false);
+	const { _id, image, name, location, rating, reviews, roomTypes } =
+		props.hotel;
 
+	if (!imageLoaded) {
+		return (
+			<div className="relative block">
+				<img
+					src={image || "/placeholder.svg"}
+					alt={name}
+					className="absolute object-cover w-full h-full opacity-0"
+					onLoad={() => setImageLoaded(true)}
+				/>
+				<HotelCardSkeleton />
+			</div>
+		);
+	}
 	return (
 		<Link to={`/hotels/${_id}`} key={_id} className="relative block group">
 			<div className="relative aspect-[4/3] overflow-hidden rounded-xl">
