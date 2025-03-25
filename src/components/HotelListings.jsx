@@ -52,8 +52,8 @@ export default function HotelListings() {
 			</div>
 			{isLoading ? (
 				<div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
-					{[...Array(8)].map(() => (
-						<SkeletonListings />
+					{[...Array(8)].map((i) => (
+						<SkeletonListings key={i} />
 					))}
 				</div>
 			) : isError ? (

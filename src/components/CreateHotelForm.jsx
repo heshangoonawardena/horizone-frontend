@@ -46,23 +46,23 @@ const CreateHotelForm = () => {
 			contactInfo,
 		} = values;
 		try {
-			// await createHotel({
-			// 	ownerId: user.id,
-			// 	name,
-			// 	location,
-			// 	image,
-			// 	description,
-			// 	amenities,
-			// 	roomTypes: roomTypes.map((type) => ({
-			// 		type,
-			// 		price: values.roomPrices[type],
-			// 	})),
-			// 	mealPlans: mealPlans.map((plan) => ({
-			// 		type: plan,
-			// 		price: values.mealPrices[plan],
-			// 	})),
-			// 	contactInfo,
-			// }).unwrap();
+			await createHotel({
+				ownerId: user.id,
+				name,
+				location,
+				image,
+				description,
+				amenities,
+				roomTypes: roomTypes.map((type) => ({
+					type,
+					price: values.roomPrices[type],
+				})),
+				mealPlans: mealPlans.map((plan) => ({
+					type: plan,
+					price: values.mealPrices[plan],
+				})),
+				contactInfo,
+			}).unwrap();
 			toast.success("Hotel created successfully");
 		} catch (error) {
 			toast.error(
