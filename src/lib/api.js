@@ -28,8 +28,14 @@ export const api = createApi({
         body: hotel,
       }),
     }),
-    getBookings: builder.query({
+    getHotelsForOwners: builder.query({
+      query: () => `hotels/owner`,
+    }),
+    getBookingsForUser: builder.query({
       query: () => `bookings/user`,
+    }),
+    getBookingsForOwner: builder.query({
+      query: () => `bookings/owner`,
     }),
     createBooking: builder.mutation({
       query: (booking) => ({
@@ -38,13 +44,23 @@ export const api = createApi({
         body: booking,
       }),
     }),
+    patchBookingStatus: builder.mutation({
+      query: ({ id, status, message }) => ({
+        url: `bookings/${id}`,
+        method: "PATCH",
+        body: { status, message },
+      }),
+    }),
   }),
 });
 
 export const {
   useGetHotelsQuery,
   useGetHotelByIdQuery,
-  useGetBookingsQuery,
+  useGetHotelsForOwnersQuery,
+  useGetBookingsForUserQuery,
+  useGetBookingsForOwnerQuery,
   useCreateHotelMutation,
   useCreateBookingMutation,
+  usePatchBookingStatusMutation,
 } = api;

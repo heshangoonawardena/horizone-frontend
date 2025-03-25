@@ -6,7 +6,6 @@ import AccountPage from "@/pages/AccountPage";
 import CreateHotelPage from "@/pages/CreateHotelPage";
 import HomePage from "@/pages/HomePage";
 import HotelPage from "@/pages/HotelPage";
-import HotelsPage from "@/pages/HotelsPage";
 import SignInPage from "@/pages/SignInPage";
 import SignUpPage from "@/pages/SignUpPage";
 import { ClerkProvider } from "@clerk/clerk-react";
@@ -31,7 +30,6 @@ createRoot(document.getElementById("root")).render(
           <Routes>
             <Route element={<RootLayout />}>
               <Route element={<MainLayout />}>
-                <Route path="/hotels" element={<HotelsPage />} />
                 <Route path="/" element={<HomePage />} />
                 <Route path="/hotels/:id" element={<HotelPage />} />
                 <Route element={<ProtectedLayout />}>
