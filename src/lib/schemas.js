@@ -11,6 +11,12 @@ export const createHotelSchema = z.object({
 		.string({ message: "Hotel image cannot be empty" })
 		.url({ message: "Invalid image URL" }),
 	description: z.string().optional(),
+	rooms: z
+		.string()
+		.transform((value) => (value === "" ? "" : Number(value)))
+		.refine((value) => !isNaN(Number(value)), {
+			message: "Expected number, received string",
+		}),
 	roomTypes: z
 		.array(z.string())
 		.min(1, { message: "At least one room type must be selected" }),

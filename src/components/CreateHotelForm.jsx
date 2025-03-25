@@ -41,6 +41,7 @@ const CreateHotelForm = () => {
 			image,
 			description,
 			amenities,
+			rooms,
 			roomTypes,
 			mealPlans,
 			contactInfo,
@@ -53,6 +54,7 @@ const CreateHotelForm = () => {
 				image,
 				description,
 				amenities,
+				rooms,
 				roomTypes: roomTypes.map((type) => ({
 					type,
 					price: values.roomPrices[type],
@@ -78,6 +80,7 @@ const CreateHotelForm = () => {
 		resolver: zodResolver(createHotelSchema),
 		defaultValues: {
 			roomTypes: [],
+			rooms: "1",
 			roomPrices: {},
 			mealPlans: [],
 			mealPrices: {},
@@ -143,6 +146,25 @@ const CreateHotelForm = () => {
 									</FormControl>
 									<FormDescription>
 										Enter the url of the hotel image
+									</FormDescription>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+					</div>
+
+					<div className="col-span-4">
+						<FormField
+							control={form.control}
+							name="rooms"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>No. of Rooms</FormLabel>
+									<FormControl>
+										<Input type="number" {...field} />
+									</FormControl>
+									<FormDescription>
+										Total number of rooms/ units you have
 									</FormDescription>
 									<FormMessage />
 								</FormItem>
