@@ -66,7 +66,7 @@ const HotelPage = () => {
 		<div className="container min-h-screen px-4 py-8 mx-auto">
 			<div className="grid gap-8 md:grid-cols-2">
 				<div className="space-y-4">
-					<div className="relative w-full h-[400px]">
+					<div className="relative w-full aspect-[3/4]">
 						<img
 							src={hotel.image}
 							alt={hotel.name}
