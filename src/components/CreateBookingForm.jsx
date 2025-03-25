@@ -1,4 +1,5 @@
 import { useCreateBookingMutation, useGetHotelByIdQuery } from "@/lib/api";
+import { bookingFormSchema as formSchema } from "@/lib/schemas";
 import { cn } from "@/lib/utils";
 import { useUser } from "@clerk/clerk-react";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -44,12 +45,10 @@ import {
 	SelectValue,
 } from "./ui/select";
 import { Textarea } from "./ui/textarea";
-import { bookingFormSchema as formSchema } from "@/lib/schemas";
 
 const CreateBookingForm = ({ open, onOpenChange, onSubmit, hotelId }) => {
 	const { user } = useUser();
-	const { data: hotel, isError, error } = useGetHotelByIdQuery(hotelId);
-	const [createBooking, { isLoading }] = useCreateBookingMutation();
+	const { data: hotel} = useGetHotelByIdQuery(hotelId);
 
 	const form = useForm({
 		resolver: zodResolver(formSchema),
@@ -408,8 +407,8 @@ const CreateBookingForm = ({ open, onOpenChange, onSubmit, hotelId }) => {
 						</div>
 
 						<DialogFooter>
-							<Button type="submit" disabled={isLoading}>
-								{isLoading ? "Checking..." : "Check Availability"}
+							<Button type="submit" >
+								Check Availability
 							</Button>
 						</DialogFooter>
 					</form>
@@ -420,3 +419,4 @@ const CreateBookingForm = ({ open, onOpenChange, onSubmit, hotelId }) => {
 };
 
 export { CreateBookingForm };
+
