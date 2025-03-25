@@ -43,11 +43,10 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import {
-	useCancelBookingMutation,
 	useGetBookingsForOwnerQuery,
 	useGetBookingsForUserQuery,
 	useGetHotelsForOwnersQuery,
-	usePatchBookingStatusMutation,
+	usePatchBookingStatusMutation
 } from "@/lib/api";
 import { useUser } from "@clerk/clerk-react";
 import { format } from "date-fns";
@@ -91,7 +90,6 @@ const AccountPage = () => {
 		isSuccess: receivedOwnHotels,
 		refetch: fetchOwnHotels,
 	} = useGetHotelsForOwnersQuery();
-	const [cancelBooking] = useCancelBookingMutation();
 	const { user } = useUser();
 	const [patchBookingStatus] = usePatchBookingStatusMutation();
 
