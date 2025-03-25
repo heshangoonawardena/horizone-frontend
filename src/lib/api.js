@@ -44,10 +44,11 @@ export const api = createApi({
         body: booking,
       }),
     }),
-    cancelBooking: builder.mutation({
-      query: (id) => ({
+    patchBookingStatus: builder.mutation({
+      query: ({ id, status, message }) => ({
         url: `bookings/${id}`,
         method: "PATCH",
+        body: { status, message },
       }),
     }),
   }),
@@ -61,5 +62,5 @@ export const {
   useGetBookingsForOwnerQuery,
   useCreateHotelMutation,
   useCreateBookingMutation,
-  useCancelBookingMutation,
+  usePatchBookingStatusMutation,
 } = api;

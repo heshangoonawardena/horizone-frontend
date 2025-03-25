@@ -47,6 +47,7 @@ import {
 	useGetBookingsForOwnerQuery,
 	useGetBookingsForUserQuery,
 	useGetHotelsForOwnersQuery,
+	usePatchBookingStatusMutation,
 } from "@/lib/api";
 import { useUser } from "@clerk/clerk-react";
 import { format } from "date-fns";
@@ -76,7 +77,7 @@ const AccountPage = () => {
 		data: myBookings,
 		isSuccess: myBookingsFetched,
 		refetch: fetchMyBookings,
-		isLoading: myBookingsLoading
+		isLoading: myBookingsLoading,
 	} = useGetBookingsForUserQuery();
 
 	const {
@@ -92,6 +93,7 @@ const AccountPage = () => {
 	} = useGetHotelsForOwnersQuery();
 	const [cancelBooking] = useCancelBookingMutation();
 	const { user } = useUser();
+	const [patchBookingStatus] = usePatchBookingStatusMutation();
 
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
 	const [selectedBookingId, setSelectedBookingId] = useState(null);
@@ -109,7 +111,10 @@ const AccountPage = () => {
 	const handleCancelBooking = async () => {
 		if (selectedBookingId) {
 			try {
-				await cancelBooking(selectedBookingId).unwrap();
+				await patchBookingStatus({
+					id: selectedBookingId,
+					status: "cancelled",
+				}).unwrap();
 				toast.success("Booking cancelled successfully");
 				fetchMyBookings();
 				fetchReceivedBookings();
@@ -152,29 +157,23 @@ const AccountPage = () => {
 		}
 	};
 
-	const handleApproveBooking = () => {
+	const handleApproveBooking = async () => {
 		if (selectedBookingForApproval) {
-			const newReply = {
-				id: `reply${Date.now()}`,
-				message: approveMessage,
-				timestamp: new Date(),
-			};
-
-			setBookings(
-				bookings.map((booking) =>
-					booking.id === selectedBookingForApproval
-						? {
-								...booking,
-								status: "confirmed",
-								ownerReplies: [...(booking.ownerReplies || []), newReply],
-						  }
-						: booking
-				)
-			);
-
-			setApproveDialogOpen(false);
-			setSelectedBookingForApproval(null);
-			setApproveMessage("");
+			try {
+				await patchBookingStatus({
+					id: selectedBookingForApproval,
+					status: "approved",
+					message: approveMessage,
+				}).unwrap();
+				toast.success("Booking approved successfully");
+				fetchReceivedBookings();
+				setApproveDialogOpen(false);
+				setSelectedBookingForApproval(null);
+				setApproveMessage("");
+			} catch (error) {
+				console.error("Failed to approve booking", error);
+				toast.error("Failed to approve booking. Please try again.");
+			}
 		}
 	};
 
@@ -408,31 +407,25 @@ const AccountPage = () => {
 																</div>
 															)}
 
-															{booking?.ownerReplies &&
-																booking.ownerReplies?.length > 0 && (
-																	<div className="space-y-3">
-																		<div className="font-medium">
-																			Replies from Hotel
-																		</div>
-																		{booking.ownerReplies.map((reply) => (
-																			<div
-																				key={reply.id}
-																				className="p-3 border-l-4 rounded-md bg-primary/5 border-primary"
-																			>
-																				<div className="flex items-center mb-1 text-sm text-muted-foreground">
-																					<Reply className="w-4 h-4 mr-1" />
-																					{format(
-																						reply.timestamp,
-																						"MMM d, yyyy 'at' h:mm a"
-																					)}
-																				</div>
-																				<div className="text-sm">
-																					{reply.message}
-																				</div>
-																			</div>
-																		))}
+															{booking?.ownerReply && (
+																<div className="space-y-3">
+																	<div className="font-medium">
+																		Replies from Hotel
 																	</div>
-																)}
+																	<div className="p-3 border-l-4 rounded-md bg-primary/5 border-primary">
+																		<div className="flex items-center mb-1 text-sm text-muted-foreground">
+																			<Reply className="w-4 h-4 mr-1" />
+																			{/* {format(
+																				booking?.ownerReply?.timestamp,
+																				"MMM d, yyyy 'at' h:mm a"
+																			)} */}
+																		</div>
+																		<div className="text-sm">
+																			{booking?.ownerReply.message}
+																		</div>
+																	</div>
+																</div>
+															)}
 														</CollapsibleContent>
 
 														<div className="flex items-center justify-between pt-4 mt-4 border-t">
@@ -517,7 +510,6 @@ const AccountPage = () => {
 
 								<div className="space-y-4">
 									{receivedBookingsLoading ? (
-										// Loading skeleton for manage bookings
 										[...Array(3)].map((_, index) => (
 											<BookingSkeleton key={index} />
 										))
@@ -643,31 +635,25 @@ const AccountPage = () => {
 																</div>
 															)}
 
-															{booking?.ownerReplies &&
-																booking.ownerReplies.length > 0 && (
-																	<div className="space-y-3">
-																		<div className="font-medium">
-																			Your Replies
-																		</div>
-																		{booking.ownerReplies.map((reply) => (
-																			<div
-																				key={reply.id}
-																				className="p-3 border-l-4 rounded-md bg-primary/5 border-primary"
-																			>
-																				<div className="flex items-center mb-1 text-sm text-muted-foreground">
-																					<Reply className="w-4 h-4 mr-1" />
-																					{format(
-																						reply.timestamp,
-																						"MMM d, yyyy 'at' h:mm a"
-																					)}
-																				</div>
-																				<div className="text-sm">
-																					{reply.message}
-																				</div>
-																			</div>
-																		))}
+															{booking?.ownerReply && (
+																<div className="space-y-3">
+																	<div className="font-medium">
+																		Your Replies
 																	</div>
-																)}
+																	<div className="p-3 border-l-4 rounded-md bg-primary/5 border-primary">
+																		<div className="flex items-center mb-1 text-sm text-muted-foreground">
+																			<Reply className="w-4 h-4 mr-1" />
+																			{/* {format(
+																				booking.ownerReply.timestamp,
+																				"MMM d, yyyy 'at' h:mm a"
+																			)} */}
+																		</div>
+																		<div className="text-sm">
+																			{booking.ownerReply.message}
+																		</div>
+																	</div>
+																</div>
+															)}
 														</CollapsibleContent>
 
 														<div className="flex items-center justify-between pt-4 mt-4 border-t">
@@ -694,7 +680,7 @@ const AccountPage = () => {
 																		variant="default"
 																		size="sm"
 																		onClick={() =>
-																			openApproveDialog(booking.id)
+																			openApproveDialog(booking._id)
 																		}
 																	>
 																		Approve
@@ -705,7 +691,9 @@ const AccountPage = () => {
 																	<Button
 																		variant="destructive"
 																		size="sm"
-																		onClick={() => openCancelDialog(booking.id)}
+																		onClick={() =>
+																			openCancelDialog(booking._id)
+																		}
 																	>
 																		Cancel
 																	</Button>
