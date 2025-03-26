@@ -180,5 +180,4 @@ export function BookingDialog({ open, onOpenChange, bookingDetails }) {
 	);
 }
 
-// Default export for lazy loading
 export default { BookingDialog };

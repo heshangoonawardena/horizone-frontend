@@ -1,6 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton";
 
-const SkeletonCardCard = () => {
+const HotelCardSkeleton = () => {
 	return (
 		<div className="relative block">
 			{/* Image skeleton */}
@@ -35,4 +35,4 @@ const SkeletonCardCard = () => {
 	);
 };
 
-export default SkeletonCardCard;
+export default HotelCardSkeleton;

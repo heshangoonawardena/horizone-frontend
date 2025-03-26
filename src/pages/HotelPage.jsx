@@ -1,17 +1,17 @@
-import AmenitiesList from "@/components/AmenitiesList"; // Import the new component
-// import BookingDialog from "@/components/BookingDialog";
+import AmenitiesList from "@/components/AmenitiesList";
 import FormSkeleton from "@/components/skeletons/FormSkeleton";
 import HotelPageSkeleton from "@/components/skeletons/HotelPageSkeleton";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { Skeleton } from "@/components/ui/skeleton";
-import { useCreateBookingMutation, useGetHotelByIdQuery } from "@/lib/api";
+import {
+	useAddFavoriteMutation,
+	useGetFavoritesQuery,
+	useGetHotelByIdQuery,
+	useRemoveFavoriteMutation,
+} from "@/lib/api";
 import { SignInButton, useUser } from "@clerk/clerk-react";
-import { MapPin, Star } from "lucide-react";
-import { Suspense } from "react";
-import { lazy } from "react";
-import { useState } from "react";
+import { Heart, MapPin, Star } from "lucide-react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { useParams } from "react-router";
 
 const CreateBookingForm = lazy(() =>
@@ -27,9 +27,25 @@ const BookingDialog = lazy(() =>
 );
 
 const HotelPage = () => {
+	const { id } = useParams();
 	const [bookingDetails, setBookingDetails] = useState(null);
 	const [formDialogOpen, setFormDialogOpen] = useState(false);
 	const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+	const [isFavorite, setIsFavorite] = useState(false);
+	const [addFavorite] = useAddFavoriteMutation();
+	const [removeFavorite] = useRemoveFavoriteMutation();
+	const {
+		data: favorites,
+		isSuccess: favoritesReceived,
+		refetch: refetchFavorites,
+		isLoading: FetchingFavorites,
+	} = useGetFavoritesQuery();
+
+	useEffect(() => {
+		if (favoritesReceived && !FetchingFavorites) {
+			setIsFavorite(favorites?.some((favorite) => favorite._id === id));
+		}
+	}, [favorites, favoritesReceived, FetchingFavorites, id]);
 
 	const handleBookingSubmit = (details) => {
 		setBookingDetails(details);
@@ -37,28 +53,47 @@ const HotelPage = () => {
 		setConfirmDialogOpen(true);
 	};
 
-	const { isLoaded, isSignedIn, user } = useUser();
+	const handleAddFavorite = async () => {
+		try {
+			if (!isFavorite) {
+				await addFavorite(id);
+				refetchFavorites();
+				setIsFavorite(true);
+			}
+		} catch (error) {
+			console.error("Failed to add favorite:", error);
+		}
+	};
 
-	const { id } = useParams();
-	const { data: hotel, isLoading, isError, error } = useGetHotelByIdQuery(id);
-	const [createBooking, { isLoading: isCreateBookingLoading }] =
-		useCreateBookingMutation();
+	const handleRemoveFavorite = async () => {
+		try {
+			if (isFavorite) {
+				await removeFavorite(id);
+				refetchFavorites();
+				setIsFavorite(false);
+			}
+		} catch (error) {
+			console.error("Failed to remove favorite:", error);
+		}
+	};
+
+	const { isLoaded, isSignedIn } = useUser();
+
+	const { data: hotel, isFetching, isError, error } = useGetHotelByIdQuery(id);
 
 	const bookingButton = () => {
 		return isLoaded && isSignedIn ? (
-			// <DialogTrigger asChild>
 			<Button onClick={() => setFormDialogOpen(true)} size="lg">
 				Book Now
 			</Button>
 		) : (
-			// </DialogTrigger>
 			<SignInButton mode="modal">
 				<Button size="lg">Book Now</Button>
 			</SignInButton>
 		);
 	};
 
-	if (isLoading) return <HotelPageSkeleton />;
+	if (isFetching) return <HotelPageSkeleton />;
 
 	if (isError) return <p className="text-red">Error: {error.message}</p>;
 
@@ -83,9 +118,17 @@ const HotelPage = () => {
 								<p className="text-muted-foreground">{hotel.location}</p>
 							</div>
 						</div>
-						<Button variant="outline" size="icon">
-							<Star className="w-4 h-4" />
-							<span className="sr-only">Add to favorites</span>
+						<Button
+							variant="outline"
+							size="icon"
+							onClick={isFavorite ? handleRemoveFavorite : handleAddFavorite}
+						>
+							<Heart
+								className={`w-4 h-4 ${isFavorite ? "fill-primary" : ""}`}
+							/>
+							<span className="sr-only">
+								{isFavorite ? "Remove from favorites" : "Add to favorites"}
+							</span>
 						</Button>
 					</div>
 					{hotel?.rating && (

@@ -46,7 +46,7 @@ import {
 	useGetBookingsForOwnerQuery,
 	useGetBookingsForUserQuery,
 	useGetHotelsForOwnersQuery,
-	usePatchBookingStatusMutation
+	usePatchBookingStatusMutation,
 } from "@/lib/api";
 import { useUser } from "@clerk/clerk-react";
 import { format } from "date-fns";
@@ -102,7 +102,9 @@ const AccountPage = () => {
 	const [hotelFilter, setHotelFilter] = useState("all");
 
 	const [approveDialogOpen, setApproveDialogOpen] = useState(false);
-	const [approveMessage, setApproveMessage] = useState("");
+	const [approveMessage, setApproveMessage] = useState(
+		"Thank you for your booking. We're looking forward to welcoming you..."
+	);
 	const [selectedBookingForApproval, setSelectedBookingForApproval] =
 		useState(null);
 
@@ -160,14 +162,13 @@ const AccountPage = () => {
 			try {
 				await patchBookingStatus({
 					id: selectedBookingForApproval,
-					status: "approved",
+					status: "confirmed",
 					message: approveMessage,
 				}).unwrap();
 				toast.success("Booking approved successfully");
 				fetchReceivedBookings();
 				setApproveDialogOpen(false);
 				setSelectedBookingForApproval(null);
-				setApproveMessage("");
 			} catch (error) {
 				console.error("Failed to approve booking", error);
 				toast.error("Failed to approve booking. Please try again.");
@@ -238,29 +239,35 @@ const AccountPage = () => {
 								{myBookingsFetched && myBookings.length}
 							</Badge>
 						</TabsTrigger>
-						<TabsTrigger
-							onClick={fetchReceivedBookings}
-							value="manage-bookings"
-							className="flex items-center gap-2"
-						>
-							Manage Bookings
-							<Badge variant="secondary" className="h-5 px-2 ml-1 text-xs">
-								{receivedBookingsFetched &&
-									receivedBookings?.filter((b) =>
-										ownedHotels?.some((h) => h._id === b.hotelId)
-									).length}
-							</Badge>
-						</TabsTrigger>
-						<TabsTrigger
-							onClick={fetchOwnHotels}
-							value="my-hotels"
-							className="flex items-center gap-2"
-						>
-							My Hotels
-							<Badge variant="secondary" className="h-5 px-2 ml-1 text-xs">
-								{receivedOwnHotels && ownedHotels.length}
-							</Badge>
-						</TabsTrigger>
+						{user?.publicMetadata?.role === "admin" && (
+							<TabsTrigger
+								onClick={fetchReceivedBookings}
+								value="manage-bookings"
+								className="flex items-center gap-2"
+							>
+								Manage Bookings
+								<Badge variant="secondary" className="h-5 px-2 ml-1 text-xs">
+									{(receivedBookingsFetched &&
+										receivedBookings?.filter((b) =>
+											ownedHotels?.some((h) => h._id === b.hotelId)
+										).length) ||
+										0}
+								</Badge>
+							</TabsTrigger>
+						)}
+
+						{user?.publicMetadata?.role === "admin" && (
+							<TabsTrigger
+								onClick={fetchOwnHotels}
+								value="my-hotels"
+								className="flex items-center gap-2"
+							>
+								My Hotels
+								<Badge variant="secondary" className="h-5 px-2 ml-1 text-xs">
+									{receivedOwnHotels && ownedHotels.length}
+								</Badge>
+							</TabsTrigger>
+						)}
 					</TabsList>
 
 					<TabsContent value="profile" className="space-y-4">
@@ -511,7 +518,7 @@ const AccountPage = () => {
 										[...Array(3)].map((_, index) => (
 											<BookingSkeleton key={index} />
 										))
-									) : filteredOwnerBookings.length === 0 ? (
+									) : filteredOwnerBookings?.length === 0 ? (
 										<div className="py-6 text-center text-muted-foreground">
 											No bookings match your current filters.
 										</div>
@@ -870,7 +877,6 @@ const AccountPage = () => {
 							<Label htmlFor="approveMessage">Confirmation Message</Label>
 							<Textarea
 								id="approveMessage"
-								placeholder="Thank you for your booking. We're looking forward to welcoming you..."
 								value={approveMessage}
 								onChange={(e) => setApproveMessage(e.target.value)}
 								className="min-h-[100px]"

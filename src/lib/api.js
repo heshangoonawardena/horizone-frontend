@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-const BACKEND_URL = "http://localhost:3000";
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 export const api = createApi({
   reducerPath: "api",
@@ -51,6 +51,23 @@ export const api = createApi({
         body: { status, message },
       }),
     }),
+    addFavorite: builder.mutation({
+      query: (hotelId) => ({
+        url: `favorites`,
+        method: "POST",
+        body: { hotelId },
+      }),
+    }),
+    removeFavorite: builder.mutation({
+      query: (hotelId) => ({
+        url: `favorites`,
+        method: "DELETE",
+        body: { hotelId },
+      }),
+    }),
+    getFavorites: builder.query({
+      query: () => `favorites`,
+    }),
   }),
 });
 
@@ -63,4 +80,7 @@ export const {
   useCreateHotelMutation,
   useCreateBookingMutation,
   usePatchBookingStatusMutation,
+  useAddFavoriteMutation,
+  useRemoveFavoriteMutation,
+  useGetFavoritesQuery,
 } = api;
