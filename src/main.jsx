@@ -15,39 +15,39 @@ import { Provider } from "react-redux";
 import { BrowserRouter, Route, Routes } from "react-router";
 import "./index.css";
 import AdminProtectedLayout from "./layouts/AdminProtectedLayout";
+import FavoritesPage from "./pages/FavoritesPage";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
 if (!PUBLISHABLE_KEY) {
-  throw new Error("Missing Publishable Key");
+	throw new Error("Missing Publishable Key");
 }
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
-      <Provider store={store}>
-        <BrowserRouter>
-          <Routes>
-            <Route element={<RootLayout />}>
-              <Route element={<MainLayout />}>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/hotels/:id" element={<HotelPage />} />
-                <Route element={<ProtectedLayout />}>
-                  <Route element={<AdminProtectedLayout />}>
-                    <Route
-                      path="/hotels/create"
-                      element={<CreateHotelPage />}
-                    />
-                  </Route>
-                  <Route path="/account" element={<AccountPage />} />
-                </Route>
-              </Route>
-              <Route path="/sign-up" element={<SignUpPage />} />
-              <Route path="/sign-in" element={<SignInPage />} />
-            </Route>
-          </Routes>
-        </BrowserRouter>
-      </Provider>
-    </ClerkProvider>
-  </StrictMode>
+		<ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
+			<Provider store={store}>
+				<BrowserRouter>
+					<Routes>
+						<Route element={<RootLayout />}>
+							<Route element={<MainLayout />}>
+								<Route path="/" element={<HomePage />} />
+								<Route path="/hotels/:id" element={<HotelPage />} />
+								<Route element={<ProtectedLayout />}>
+									<Route element={<AdminProtectedLayout />}>
+										<Route
+											path="/hotels/create"
+											element={<CreateHotelPage />}
+										/>
+									</Route>
+									<Route path="/account" element={<AccountPage />} />
+									<Route path="/favorites" element={<FavoritesPage />} />
+								</Route>
+							</Route>
+							<Route path="/sign-up" element={<SignUpPage />} />
+							<Route path="/sign-in" element={<SignInPage />} />
+						</Route>
+					</Routes>
+				</BrowserRouter>
+			</Provider>
+		</ClerkProvider>
 );

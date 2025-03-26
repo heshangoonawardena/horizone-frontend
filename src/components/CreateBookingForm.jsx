@@ -109,8 +109,6 @@ const CreateBookingForm = ({ open, onOpenChange, onSubmit, hotelId }) => {
 			
 			onSubmit(bookingDetails);
 
-			// await createBooking(bookingDetails).unwrap();
-			// toast.success("Hotel created successfully");
 		} catch (error) {
 			console.error("Form submission error", error);
 			toast.error("Failed to submit the form. Please try again.");
