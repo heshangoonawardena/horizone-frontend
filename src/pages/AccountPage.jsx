@@ -731,7 +731,7 @@ const AccountPage = () => {
 								<div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
 									{receivedOwnHotels &&
 										ownedHotels?.map((hotel) => (
-											<Card key={hotel.id} className="overflow-hidden">
+											<Card key={hotel._id} className="overflow-hidden">
 												<div className="w-full overflow-hidden aspect-video">
 													<img
 														src={hotel.image || "/placeholder.svg"}
