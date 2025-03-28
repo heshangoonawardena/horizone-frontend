@@ -8,7 +8,7 @@ const LocationTab = (props) => {
   };
 
   return (
-    <Button size="lg" variant={props.selectedLocation === props.location ? "default" : "outline" } onClick={handleClick} className="mr-2 ">
+    <Button variant={props.selectedLocation === props.location ? "default" : "ghost" } onClick={handleClick} className="mr-2 ">
       {props.location}
     </Button>
   );
