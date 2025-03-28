@@ -25,8 +25,6 @@ export default function HotelListings() {
 						.includes(selectedLocation.toLocaleLowerCase())
 			  );
 
-	isLoading;
-
 	return (
 		<section className="px-8 py-8 lg:py-16">
 			<div className="mb-12">
