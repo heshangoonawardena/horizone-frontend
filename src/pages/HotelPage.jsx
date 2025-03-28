@@ -124,7 +124,9 @@ const HotelPage = () => {
 							onClick={isFavorite ? handleRemoveFavorite : handleAddFavorite}
 						>
 							<Heart
-								className={`w-4 h-4 ${isFavorite ? "fill-primary" : ""}`}
+								className={`w-4 h-4 ${
+									isFavorite ? "fill-red-500 text-red-500" : ""
+								}`}
 							/>
 							<span className="sr-only">
 								{isFavorite ? "Remove from favorites" : "Add to favorites"}
@@ -133,7 +135,7 @@ const HotelPage = () => {
 					</div>
 					{hotel?.rating && (
 						<div className="flex items-center space-x-1">
-							<Star className="w-5 h-5 fill-primary text-primary" />
+							<Star className="w-5 h-5 text-yellow-400 fill-yellow-400" />
 							<span className="font-bold">{hotel?.rating}</span>
 							<span className="text-muted-foreground">
 								({hotel.reviews?.toLocaleString()} reviews)
