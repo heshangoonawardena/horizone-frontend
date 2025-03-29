@@ -56,7 +56,7 @@ const FavoritesPage = () => {
 							<HotelCardSkeleton key={index} />
 						))}
 					</div>
-				) : !favorites ? (
+				) : favorites.length == 0  ? (
 					<div className="py-12 space-y-4 text-center">
 						<Heart className="w-16 h-16 mx-auto text-muted-foreground" />
 						<h2 className="text-xl font-medium">No favorites yet</h2>
