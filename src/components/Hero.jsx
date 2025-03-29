@@ -54,6 +54,7 @@ export default function Hero() {
 									<Input
 										placeholder="Describe your dream destination and experience, we'll find the perfect place for you."
 										type="text"
+										autoComplete="off"
 										className="w-full text-white bg-transparent border-none lg:text-lg placeholder:text-white/50 focus:outline-none focus:ring-0 focus:border-transparent"
 										{...field}
 									/>
