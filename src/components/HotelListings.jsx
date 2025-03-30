@@ -21,12 +21,16 @@ export default function HotelListings() {
 
 	const locations = isSuccess && [
 		"ALL",
-		...hotels.slice(0, 5).map((hotel) => {
-			if (hotel?.location) {
-				const words = hotel.location.toUpperCase().split(" ");
-				return words[words.length - 1];
-			}
-		}),
+		...Array.from(
+			new Set(
+				hotels.map((hotel) => {
+					if (hotel?.location) {
+						const words = hotel.location.toUpperCase().split(" ");
+						return words[words.length - 1];
+					}
+				})
+			)
+		).slice(0, 5),
 	];
 
 	const handleSelectLocation = (location) => {
