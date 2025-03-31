@@ -44,7 +44,7 @@ export default function Hero() {
 					onSubmit={handleSearch}
 					className="flex items-center w-full max-w-3xl p-2 rounded-full bg-black/10 backdrop-blur-md lg:h-16"
 				>
-					<ShineBorder shineColor={"white"} />
+					<ShineBorder borderWidth={4} shineColor={"#AAA"} />
 					<FormField
 						control={form.control}
 						name="search"
