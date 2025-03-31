@@ -97,6 +97,8 @@ const HotelPage = () => {
 
 	if (isError) return <p className="text-red">Error: {error.message}</p>;
 
+	const minPrice = Math.min(...hotel.roomTypes.map((room) => room.price));
+
 	return (
 		<div className="container min-h-screen px-4 py-8 mx-auto">
 			<div className="grid gap-8 md:grid-cols-2">
@@ -154,9 +156,7 @@ const HotelPage = () => {
 
 					<div className="flex items-center justify-between">
 						<div>
-							<p className="text-2xl font-bold">
-								Starting at ${hotel.roomTypes[0].price}
-							</p>
+							<p className="text-2xl font-bold">Starting at ${minPrice}</p>
 							<p className="text-sm text-muted-foreground">per night</p>
 						</div>
 						{bookingButton()}

@@ -22,7 +22,8 @@ export const api = createApi({
       query: (id) => `hotels/${id}`,
     }),
     getHotelForSearchQuery: builder.query({
-      query: ({query}) => `hotels/search/retrieve/?query=${query}`,
+      query: ({ query, sortBy = "price", order = "asc", minPrice = 0, maxPrice = Infinity }) =>
+        `hotels/search/retrieve/?query=${query}&sortBy=${sortBy}&order=${order}&minPrice=${minPrice}&maxPrice=${maxPrice}`,
     }),
     createHotel: builder.mutation({
       query: (hotel) => ({
@@ -43,28 +44,28 @@ export const api = createApi({
     createBooking: builder.mutation({
       query: (booking) => ({
         url: `bookings`,
-        method: "POST",
+        method: `POST`,
         body: booking,
       }),
     }),
     patchBookingStatus: builder.mutation({
       query: ({ id, status, message }) => ({
         url: `bookings/${id}`,
-        method: "PATCH",
+        method: `PATCH`,
         body: { status, message },
       }),
     }),
     addFavorite: builder.mutation({
       query: (hotelId) => ({
         url: `favorites`,
-        method: "POST",
+        method: `POST`,
         body: { hotelId },
       }),
     }),
     removeFavorite: builder.mutation({
       query: (hotelId) => ({
         url: `favorites`,
-        method: "DELETE",
+        method: `DELETE`,
         body: { hotelId },
       }),
     }),

@@ -6,9 +6,25 @@ import HotelCard from "./HotelCard";
 import LocationTab from "./LocationTab";
 import SpotlightCard from "./reactBites/SpotLightCard";
 import SkeletonListings from "./skeletons/HotelCardSkeleton";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "./ui/select";
 
 export default function HotelListings() {
 	const [selectedLocation, setSelectedLocation] = useState("ALL");
+	const [sortBy, setSortBy] = useState("price");
+	const [order, setOrder] = useState("asc");
+	const [minPrice, setMinPrice] = useState(0);
+	const [maxPrice, setMaxPrice] = useState(Infinity);
+	const [tempMinPrice, setTempMinPrice] = useState(0);
+	const [tempMaxPrice, setTempMaxPrice] = useState(Infinity);
 	const searchValue = useSelector((state) => state.search.value);
 
 	const {
@@ -17,7 +33,13 @@ export default function HotelListings() {
 		isError,
 		error,
 		isSuccess,
-	} = useGetHotelForSearchQueryQuery({ query: searchValue });
+	} = useGetHotelForSearchQueryQuery({
+		query: searchValue,
+		sortBy,
+		order,
+		minPrice,
+		maxPrice,
+	});
 
 	const locations = isSuccess && [
 		"ALL",
@@ -35,6 +57,23 @@ export default function HotelListings() {
 
 	const handleSelectLocation = (location) => {
 		setSelectedLocation(location);
+	};
+
+	const handleSortChange = (e) => {
+		const [newSortBy, newOrder] = e.split("-");
+		setSortBy(newSortBy);
+		setOrder(newOrder);
+	};
+
+	const handlePriceRangeChange = (e) => {
+		const { name, value } = e.target;
+		if (name === "minPrice") setTempMinPrice(value);
+		if (name === "maxPrice") setTempMaxPrice(value);
+	};
+
+	const handleApplyFilters = () => {
+		setMinPrice(tempMinPrice);
+		setMaxPrice(tempMaxPrice === "" ? Infinity : tempMaxPrice);
 	};
 
 	const filteredHotels =
@@ -55,6 +94,48 @@ export default function HotelListings() {
 					Discover the most trending hotels worldwide for an unforgettable
 					experience.
 				</p>
+				<div className="flex gap-12 mt-4">
+					<div className="flex flex-col gap-2">
+						<Label className="font-bold">Sort By:</Label>
+						<Select
+							onValueChange={handleSortChange}
+							defaultValue={`${sortBy}-${order}`}
+						>
+							<SelectTrigger>
+								<SelectValue />
+							</SelectTrigger>
+							<SelectContent>
+								<SelectItem value="price-asc">Price (Low to High)</SelectItem>
+								<SelectItem value="price-desc">Price (High to Low)</SelectItem>
+								<SelectItem value="rating-asc">Rating (Low to High)</SelectItem>
+								<SelectItem value="rating-desc">
+									Rating (High to Low)
+								</SelectItem>
+							</SelectContent>
+						</Select>
+					</div>
+					<div className="flex flex-col gap-2">
+						<Label className="font-bold">Min Price:</Label>
+						<Input
+							type="number"
+							name="minPrice"
+							value={tempMinPrice}
+							onChange={handlePriceRangeChange}
+						/>
+					</div>
+					<div className="flex flex-col gap-2">
+						<Label className="font-bold">Max Price:</Label>
+						<Input
+							type="number"
+							name="maxPrice"
+							value={tempMaxPrice === Infinity ? "" : tempMaxPrice}
+							onChange={handlePriceRangeChange}
+						/>
+					</div>
+					<Button className="mt-4 " cls onClick={handleApplyFilters}>
+						Apply Filters
+					</Button>
+				</div>
 			</div>
 			{isFetching ? (
 				<div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">

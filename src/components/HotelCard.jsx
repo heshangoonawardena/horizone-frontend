@@ -3,10 +3,11 @@ import { useState } from "react";
 import { Link } from "react-router";
 import HotelCardSkeleton from "./skeletons/HotelCardSkeleton";
 
-const HotelCard = (props) => {
+export default function HotelCard({ hotel }) {
 	const [imageLoaded, setImageLoaded] = useState(false);
 	const { _id, image, name, location, rating, reviews, roomTypes, confidence } =
-		props.hotel;
+		hotel;
+	const minPrice = Math.min(...hotel.roomTypes.map((room) => room.price));
 
 	if (!imageLoaded) {
 		return (
@@ -52,11 +53,9 @@ const HotelCard = (props) => {
 					</span>
 				</div>
 				<div className="flex items-baseline space-x-2">
-					<span className="text-xl font-bold">${roomTypes[0].price}</span>
+					<span className="text-xl font-bold">${minPrice}</span>
 				</div>
 			</div>
 		</Link>
 	);
-};
-
-export default HotelCard;
+}
